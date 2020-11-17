@@ -1394,7 +1394,7 @@ class Make_Time_Features(BaseEstimator, TransformerMixin):
     -Given a time feature , it extracts more features
     - Only accepts / works where feature / data type is datetime64[ns]
     - full list of features is:
-      ['month','weekday',is_month_end','is_month_start','hour']
+      ['year','month','weekday',is_month_end','is_month_start','hour']
     - all extracted features are defined as string / object
     -it is recommended to run Define_dataTypes first
       Args: 
@@ -1406,7 +1406,7 @@ class Make_Time_Features(BaseEstimator, TransformerMixin):
     def __init__(
         self,
         time_feature=None,
-        list_of_features=["month", "weekday", "is_month_end", "is_month_start", "hour"],
+        list_of_features=["year", "month", "weekday", "is_month_end", "is_month_start", "hour"],
     ):
         self.time_feature = time_feature
         self.list_of_features_o = set(list_of_features)
@@ -1423,6 +1423,8 @@ class Make_Time_Features(BaseEstimator, TransformerMixin):
 
         def get_time_features(r):
             features = []
+            if "year" in self.list_of_features_o:
+                features.append(("_year", float(datetime.date(r).year)))
             if "month" in self.list_of_features_o:
                 features.append(("_month", str(datetime.date(r).month)))
             if "weekday" in self.list_of_features_o:
